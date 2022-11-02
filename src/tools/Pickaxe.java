@@ -11,8 +11,7 @@ public class Pickaxe extends Tool{
     }
 
     public Report mineRocks(Tile tile){
-
-        Report retval = new Report();
+        Report retval = new Report(true, null);
         retval = tile.clearRocks();
 
         return retval;

@@ -11,8 +11,8 @@ public class WateringCan extends Tool {
     }
 
     public Report waterTile(Tile tile){
-        Report retval = new Report();
 
+        Report retval = new Report(true, null);
         // return tile.currentCrop.addWater();
 
         return retval;

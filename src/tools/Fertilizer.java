@@ -11,8 +11,7 @@ public class Fertilizer extends Tool {
     }
 
     public Report fertilizeTile(Tile tile){
-        Report retval = new Report();
-
+        Report retval = new Report(true, null);
         // return tile.currentCrop.addFertilizer();
 
         return retval;
