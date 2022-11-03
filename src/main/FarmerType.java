@@ -15,7 +15,7 @@ public class FarmerType {
     // default FarmerType
     public FarmerType(){
 
-        this.type = "Farmer";
+        this.type = "Unregistered";
         this.levelRequirement = 0;
         this.bonusEarnings = 0;
         this.seedCostReduction = 0;

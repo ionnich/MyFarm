@@ -4,4 +4,13 @@ package tools;
 public class Tool {
     protected double cost;
     protected double expGain;
+
+    public double getCost() {
+        return cost;
+    }
+    public double getExpGain() {
+        return expGain;
+    }
+
+
 }

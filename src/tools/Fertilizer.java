@@ -1,5 +1,6 @@
 package tools;
 
+import main.FarmerType;
 import main.Report;
 import main.Tile;
 
@@ -10,11 +11,17 @@ public class Fertilizer extends Tool {
         this.expGain = 4;
     }
 
-    public Report fertilizeTile(Tile tile){
-        Report retval = new Report(true, null);
-        // return tile.currentCrop.addFertilizer();
+    public Report fertilizeTile(FarmerType type, Tile tile){
 
-        return retval;
+        // check if tile has a crop
+        if (tile.getCurrentCrop() == null)
+            return new Report(false, "There is no crop to fertilize.");
+        
+        // check if tile is unplowed
+        if (!tile.isPlowed())
+            return new Report(false, "The tile is unplowed.");
+
+        return tile.getCurrentCrop().addFertilizer(type.getFertilizerMaxIncrease()); 
     }
     
 }
