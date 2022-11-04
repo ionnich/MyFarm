@@ -1,9 +1,10 @@
 package main;
 
 /**
-* A crop is an object that can be planted on a tile.
-* @version 1.0
-*/
+ * A crop is an object that can be planted on a tile.
+ * 
+ * @version 1.0
+ */
 public class Crop {
 
     // organic attributes
@@ -28,6 +29,7 @@ public class Crop {
 
     /**
      * Creates a new crop object depending on the supplied seed
+     * 
      * @param seed the seed to be planted
      */
     public Crop(Seed seed) {
@@ -46,7 +48,7 @@ public class Crop {
     public String getCropType() {
         return cropType;
     }
-    
+
     /**
      * @return the crop's current water level
      */
@@ -57,7 +59,7 @@ public class Crop {
     /**
      * @return the selling price of the crop
      */
-    public double getMarketPrice(){
+    public double getMarketPrice() {
 
         return this.marketPrice;
     }
@@ -65,7 +67,7 @@ public class Crop {
     /**
      * @return the limit of the water level
      */
-    public double getWaterMax(){
+    public double getWaterMax() {
 
         return this.source.getWaterMax();
     }
@@ -73,7 +75,7 @@ public class Crop {
     /**
      * @return the amount of exp the crop provides the farmer when harvested
      */
-    public double getExpGain(){
+    public double getExpGain() {
 
         return this.expGain;
     }
@@ -120,9 +122,9 @@ public class Crop {
         return this.source.getFertilizerMax();
     }
 
-
     /**
      * Withers a plant
+     * 
      * @return whether the crop was successfully withered or not
      */
     public Report witherPlant() {
@@ -133,18 +135,18 @@ public class Crop {
         return new Report(true, this.cropName + "plant has withered");
     }
 
-
     /**
      * Increases the water level of the crop
+     * 
      * @param modifier changes the maximum amount of water a plant can hold
      * @return whether the plant was successfully watered or not
      */
     public Report addWater(int modifier) {
 
-        if(this.waterLevel < this.source.getWaterMax() + modifier){
-                
+        if (this.waterLevel < this.source.getWaterMax() + modifier) {
+
             this.waterLevel++;
-            if(this.fertilizerLevel == this.source.getWaterMax() + modifier){
+            if (this.fertilizerLevel == this.source.getWaterMax() + modifier) {
                 return new Report(true, "Water bonus met!");
             }
 
@@ -156,15 +158,16 @@ public class Crop {
 
     /**
      * Increases the amount of fertilizer on the crop
+     * 
      * @param modifier changes the maximum amount of fertilizer a plant can hold
      * @return whether the plant was successfully fertilized or not
      */
-    public Report addFertilizer(int modifier){
+    public Report addFertilizer(int modifier) {
 
-        if(this.fertilizerLevel < this.source.getFertilizerMax() + modifier){
+        if (this.fertilizerLevel < this.source.getFertilizerMax() + modifier) {
 
             this.fertilizerLevel++;
-            if(this.fertilizerLevel == this.source.getFertilizerMax() + modifier)
+            if (this.fertilizerLevel == this.source.getFertilizerMax() + modifier)
                 return new Report(true, "Fertilizer bonus met!");
 
             return new Report(true, "added fertilizer");
@@ -175,6 +178,7 @@ public class Crop {
 
     /**
      * Advances the crop's growth by a day
+     * 
      * @return whether the plant was successfully harvested or not
      */
     public Report growCrop() {
@@ -182,7 +186,7 @@ public class Crop {
         // decrement harvestDay
         this.harvestCountdown--;
 
-        if(this.isHarvestable && this.harvestCountdown < 0){
+        if (this.isHarvestable && this.harvestCountdown < 0) {
             this.witherPlant();
             return new Report(false, "Crop has withered");
         }
@@ -191,10 +195,9 @@ public class Crop {
         String witherWater = "";
         String witherFertilizer = "";
 
-
         // check if water needs are met on harvestDay
         if (this.waterLevel < this.source.getWaterNeeds()) {
-            if(this.harvestCountdown <= 0) {
+            if (this.harvestCountdown <= 0) {
                 this.witherPlant();
 
                 witherWater = "water needs not met on harvest day";
@@ -203,19 +206,19 @@ public class Crop {
 
         // check if fertilizer needs are met on harvestDay
         if (this.fertilizerLevel < this.source.getFertilizerNeeds()) {
-            if(this.harvestCountdown <= 0) {
+            if (this.harvestCountdown <= 0) {
                 this.witherPlant();
 
                 witherFertilizer = "fertilizer needs not met on harvest day";
             }
         }
 
-        if(witherWater != "" && witherFertilizer != "")
+        if (witherWater != "" && witherFertilizer != "")
             witherWater += " and ";
 
         witherReason = witherWater + witherFertilizer;
 
-        if(this.isWithered){
+        if (this.isWithered) {
             return new Report(false, this.cropName + " plant has withered because " + witherReason);
         }
 
@@ -225,9 +228,8 @@ public class Crop {
             return new Report(true, "Crop is ready to harvest");
         }
 
-
         return new Report(true, "Crop has grown");
 
     }
-    
+
 }

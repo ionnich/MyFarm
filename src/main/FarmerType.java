@@ -1,9 +1,10 @@
 package main;
 
 /**
-* FarmerType represents the different types of farmers in the game.
-* @version 1.0
-*/
+ * FarmerType represents the different types of farmers in the game.
+ * 
+ * @version 1.0
+ */
 public class FarmerType {
 
     // name for the type of farmer
@@ -19,7 +20,7 @@ public class FarmerType {
     /**
      * Creates a new unregistered farmer type object
      */
-    public FarmerType(){
+    public FarmerType() {
 
         this.type = "Unregistered";
         this.levelRequirement = 0;
@@ -31,11 +32,12 @@ public class FarmerType {
 
     /**
      * Creates a new farmer type object based on the supplied type
+     * 
      * @param type the name of the farmer type
      */
-    public FarmerType(String type){
+    public FarmerType(String type) {
 
-        if(type == "Registered"){
+        if (type == "Registered") {
 
             this.type = "Registered";
             this.levelRequirement = 5;
@@ -46,7 +48,7 @@ public class FarmerType {
             this.registrationFee = 200;
         }
 
-        else if(type == "Distinguished"){
+        else if (type == "Distinguished") {
 
             this.type = "Distinguished";
             this.levelRequirement = 10;
@@ -57,7 +59,7 @@ public class FarmerType {
             this.registrationFee = 300;
         }
 
-        else if(type == "Legendary"){
+        else if (type == "Legendary") {
 
             this.type = "Legendary";
             this.levelRequirement = 15;
@@ -71,7 +73,6 @@ public class FarmerType {
         else
             System.out.println(type + " is not a valid FarmerType");
     }
-
 
     // setters and getters for FarmerType
     public String getType() {

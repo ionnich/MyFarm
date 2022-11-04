@@ -1,9 +1,10 @@
 package main;
 
 /**
-* HarvestRange represents the minimum and maximum harvest amount of a crop.
-* @version 1.0
-*/
+ * HarvestRange represents the minimum and maximum harvest amount of a crop.
+ * 
+ * @version 1.0
+ */
 public class HarvestRange {
 
     private int max;
@@ -17,7 +18,7 @@ public class HarvestRange {
     /**
      * @return a random harvest amount within the range
      */
-    public int getRandom(){
+    public int getRandom() {
 
         return (int) (Math.random() * (max - min + 1) + min);
     }

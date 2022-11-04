@@ -1,9 +1,10 @@
 package main;
 
 /**
-* A tile holds and allows a crop to be planted and grow
-* @version 1.0
-*/
+ * A tile holds and allows a crop to be planted and grow
+ * 
+ * @version 1.0
+ */
 public class Tile {
 
     private Crop currentCrop;
@@ -25,17 +26,18 @@ public class Tile {
     /**
      * @param status the desired rock status of the tile
      */
-    private void setHasRocks(boolean status){
+    private void setHasRocks(boolean status) {
         this.hasRocks = status;
     }
 
     /**
      * adds rocks to the tile -- setting hasRocks to true
+     * 
      * @return the context and result of the action
      */
-    public Report addRocks(){
+    public Report addRocks() {
 
-        if (this.hasRocks){
+        if (this.hasRocks) {
             return new Report(false, "Tile already has rocks");
         }
 
@@ -45,11 +47,12 @@ public class Tile {
 
     /**
      * removes rocks from the tile -- setting hasRocks to false
+     * 
      * @return the context and result of the action
      */
-    public Report clearRocks(){
+    public Report clearRocks() {
 
-        if (!this.hasRocks){
+        if (!this.hasRocks) {
             return new Report(false, "Tile does not have rocks");
         }
 
@@ -59,11 +62,12 @@ public class Tile {
 
     /**
      * changes the state of the tile's plowed status
+     * 
      * @return the context and result of the action
      */
-    public Report setPlowed(boolean status){
+    public Report setPlowed(boolean status) {
 
-        if (this.isPlowed == status){
+        if (this.isPlowed == status) {
             return new Report(false, "Tile is already plowed");
         }
 
@@ -73,9 +77,10 @@ public class Tile {
 
     /**
      * changes the state of the tile's occupied status
+     * 
      * @return the context and result of the action
      */
-    public Report setOccupied(boolean status){
+    public Report setOccupied(boolean status) {
 
         this.isOccupied = status;
 
@@ -92,12 +97,12 @@ public class Tile {
 
     /**
      * changes the crop currently planted on the tile
+     * 
      * @param currentCrop the desired crop
      */
     public void setCurrentCrop(Crop currentCrop) {
         this.currentCrop = currentCrop;
     }
-
 
     /**
      * @return whether the tile is plowed
@@ -125,7 +130,6 @@ public class Tile {
      */
     public String[] getStatus() {
 
-
         String[] status = new String[2];
 
         // first status column
@@ -139,21 +143,20 @@ public class Tile {
             status[0] = "🟩";
 
         // second status column
-        if(this.currentCrop != null){
+        if (this.currentCrop != null) {
 
             status[1] = "🌱";
-            if(this.currentCrop.getWaterLevel() > 0){
+            if (this.currentCrop.getWaterLevel() > 0) {
                 status[0] = "💧";
             }
-            if(this.currentCrop.getFertilizerLevel() > 0){
+            if (this.currentCrop.getFertilizerLevel() > 0) {
                 status[1] = "✨";
             }
             if (this.currentCrop.isWithered())
                 status[1] = "🍂";
             else if (this.currentCrop.isHarvestable())
                 status[1] = "🍀";
-        }
-        else 
+        } else
             status[1] = "🟩";
 
         return status;
@@ -162,19 +165,19 @@ public class Tile {
     /**
      * @return whether the tile is plowable by the farmer
      */
-    public boolean isPlowable(){
+    public boolean isPlowable() {
 
         // check if tile is plowable
-        if(this.isPlowed)
+        if (this.isPlowed)
             return false;
 
-        if(this.isOccupied)
-            return false;
-        
-        if(this.hasRocks)
+        if (this.isOccupied)
             return false;
 
-        if(this.currentCrop != null)
+        if (this.hasRocks)
+            return false;
+
+        if (this.currentCrop != null)
             return false;
 
         return true;

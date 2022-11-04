@@ -1,9 +1,10 @@
 package main;
 
 /**
-* A report is a rich message return from a method call.
-* @version 1.0
-*/
+ * A report is a rich message return from a method call.
+ * 
+ * @version 1.0
+ */
 public class Report {
     private String message;
     private boolean success;
@@ -23,7 +24,6 @@ public class Report {
     public String getMessage() {
         return message;
     }
-
 
     /**
      * @return whether the action was successful

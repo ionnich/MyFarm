@@ -1,19 +1,18 @@
 package main;
 
 /**
-* A seed creates a crop and holds/dictates its corresponding attributes
-* @version 1.0
-*/
+ * A seed creates a crop and holds/dictates its corresponding attributes
+ * 
+ * @version 1.0
+ */
 public class Seed {
-
 
     // array of all possible seedNames
     private String[] seedTable = {
-        "Turnip", "Carrot", "Potato","Rose", "Tulips", "Sunflower", "Mango", "Apple"
+            "Turnip", "Carrot", "Potato", "Rose", "Tulips", "Sunflower", "Mango", "Apple"
     };
 
     // make hashtable of seedNames and their corresponding methods
-
 
     private String name;
     private double cost;
@@ -34,13 +33,13 @@ public class Seed {
     private double baseSellPrice;
     private double expGain;
 
-
     /**
      * Creates a new seed object depending on the supplied seedName
+     * 
      * @param name the name of the desired seed
      * @throws Exception if the seedName is not found in the seedList
      */
-    public Seed(String name) throws Exception{
+    public Seed(String name) throws Exception {
 
         boolean exists = false;
         int index = -1;
@@ -141,7 +140,7 @@ public class Seed {
     /**
      * changes the attributes of the seed to default
      */
-    private void makeDefault(){
+    private void makeDefault() {
 
         this.name = null;
         this.cost = 0;
@@ -159,7 +158,7 @@ public class Seed {
     /**
      * changes the attributes of the seed to a turnip
      */
-    private void makeTurnip(){
+    private void makeTurnip() {
 
         this.daysToHarvest = 2;
         this.waterNeeds = 1;
@@ -173,11 +172,10 @@ public class Seed {
         this.expGain = 5;
     }
 
-
     /**
      * changes the attributes of the seed to a carrot
      */
-    private void makeCarrot(){
+    private void makeCarrot() {
 
         this.daysToHarvest = 3;
         this.waterNeeds = 1;
@@ -191,28 +189,27 @@ public class Seed {
         this.expGain = 7.5;
     }
 
-
     /**
      * changes the attributes of the seed to a potato
      */
-    private void makePotato(){
-            
-            this.daysToHarvest = 5;
-            this.waterNeeds = 3;
-            this.waterMax = 4;
-            this.fertilizerNeeds = 1;
-            this.fertilizerMax = 2;
-            this.harvestMin = 1;
-            this.harvestMax = 10;
-            this.cost = 20;
-            this.baseSellPrice = 3;
-            this.expGain = 12.5;
+    private void makePotato() {
+
+        this.daysToHarvest = 5;
+        this.waterNeeds = 3;
+        this.waterMax = 4;
+        this.fertilizerNeeds = 1;
+        this.fertilizerMax = 2;
+        this.harvestMin = 1;
+        this.harvestMax = 10;
+        this.cost = 20;
+        this.baseSellPrice = 3;
+        this.expGain = 12.5;
     }
 
     /**
      * changes the attributes of the seed to a rose
      */
-    private void makeRose(){
+    private void makeRose() {
 
         this.daysToHarvest = 1;
         this.waterNeeds = 1;
@@ -229,7 +226,7 @@ public class Seed {
     /**
      * changes the attributes of the seed to a tulip
      */
-    private void makeTulips(){
+    private void makeTulips() {
 
         this.daysToHarvest = 2;
         this.waterNeeds = 2;
@@ -246,7 +243,7 @@ public class Seed {
     /**
      * changes the attributes of the seed to a sunflower
      */
-    private void makeSunflower(){
+    private void makeSunflower() {
 
         this.daysToHarvest = 3;
         this.waterNeeds = 2;
@@ -263,7 +260,7 @@ public class Seed {
     /**
      * changes the attributes of the seed to a mango
      */
-    private void makeMango(){
+    private void makeMango() {
 
         this.daysToHarvest = 10;
         this.waterNeeds = 7;
@@ -280,7 +277,7 @@ public class Seed {
     /**
      * changes the attributes of the seed to an apple
      */
-    private void makeApple(){
+    private void makeApple() {
 
         this.daysToHarvest = 10;
         this.waterNeeds = 7;

@@ -145,14 +145,14 @@ public class FarmLand {
     /**
      * Performs actions based on the input of the player
      * @param inputs the inputs available to the player
+     * @param sc the scanner object used to get input from the player
      * @return the result of the action taken
      */
-    public Report performAction(String inputs){
+    public Report performAction(String inputs, Scanner sc){
 
         Report retval = new Report(false, "Invalid input.");
 
         System.out.print("\nselect action: ");
-        Scanner sc = new Scanner(System.in);
             // get user input
             String selection = sc.nextLine();
 

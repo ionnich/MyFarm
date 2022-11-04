@@ -8,9 +8,9 @@ public class Tool {
     public double getCost() {
         return cost;
     }
+
     public double getExpGain() {
         return expGain;
     }
-
 
 }

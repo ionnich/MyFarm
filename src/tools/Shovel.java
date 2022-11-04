@@ -10,13 +10,13 @@ public class Shovel extends Tool {
         this.cost = 7;
     }
 
-    public Report digWitheredCrop(Tile tile){
+    public Report digWitheredCrop(Tile tile) {
 
         if (tile.getCurrentCrop() == null) {
             return new Report(false, "There is no crop to dig up.");
         }
 
-        if(!tile.getCurrentCrop().isWithered())
+        if (!tile.getCurrentCrop().isWithered())
             return new Report(false, "The crop is not withered.");
 
         tile.setCurrentCrop(null);

@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import tools.*;
 
 /**
-* The farmer is the main actor in FarmerType
-* @version 1.0
-*/
+ * The farmer is the main actor in FarmerType
+ * 
+ * @version 1.0
+ */
 public class Farmer {
 
     FarmerType type;
@@ -32,7 +33,7 @@ public class Farmer {
     /**
      * Creates a new farmer object
      */
-    public Farmer(){
+    public Farmer() {
 
         this.name = "Adam Smith";
         this.type = new FarmerType();
@@ -48,9 +49,10 @@ public class Farmer {
 
     /**
      * Creates a new farmer object with the specified name
+     * 
      * @param name the name of the farmer
      */
-    public Farmer(String name){
+    public Farmer(String name) {
 
         this.name = name;
         this.type = new FarmerType();
@@ -64,7 +66,7 @@ public class Farmer {
         this.pickaxe = new Pickaxe();
     }
 
-    public double getCurrentExp(){
+    public double getCurrentExp() {
         return this.currentExp;
     }
 
@@ -76,33 +78,37 @@ public class Farmer {
     }
 
     // get coordinates
-    public int getCurrentX(){
+    public int getCurrentX() {
         return this.currentX;
     }
-    public int getCurrentY(){
+
+    public int getCurrentY() {
         return this.currentY;
     }
 
     /**
      * Changes the farmer's current coordinates
+     * 
      * @param x the new x coordinate
      * @param y the new y coordinate
      */
-    public void gotoTile(int x, int y){
+    public void gotoTile(int x, int y) {
         this.currentX = x;
         this.currentY = y;
     }
 
     /**
      * Purchases a seed from the farm and adds it to the farmer's inventory
+     * 
      * @param seed the seed to be purchased
      * @param type the farmer's type (used to determine the price of the seed)
-     * @return a rich message containing: true if the purchase was successful, false otherwise
+     * @return a rich message containing: true if the purchase was successful, false
+     *         otherwise
      */
-    public Report buySeed(Seed seed, FarmerType type){
+    public Report buySeed(Seed seed, FarmerType type) {
 
         // check if farmer has enough money
-        if(this.objectCoins < seed.getCost() - type.getSeedCostReduction())
+        if (this.objectCoins < seed.getCost() - type.getSeedCostReduction())
             return new Report(false, "You do not have enough money to buy this seed.");
 
         this.seedInventory.add(seed);
@@ -112,36 +118,39 @@ public class Farmer {
 
     /**
      * Plants a tree on the specified tile
-     * @param seed the seed to be planted
-     * @param field the farm's 2d array of tiles (used to determine whether the farm can accommodate the tree)
-     * @return a rich message containing: true if the planting was successful, false otherwise
+     * 
+     * @param seed  the seed to be planted
+     * @param field the farm's 2d array of tiles (used to determine whether the farm
+     *              can accommodate the tree)
+     * @return a rich message containing: true if the planting was successful, false
+     *         otherwise
      */
-    public Report plantTree(Seed seed, Tile[][] field){
+    public Report plantTree(Seed seed, Tile[][] field) {
 
         // chcek if adjacent tiles are empty
-        if (field[this.currentX][this.currentY + 1].getCurrentCrop() != null){
+        if (field[this.currentX][this.currentY + 1].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
-        if (field[this.currentX][this.currentY - 1].getCurrentCrop() != null){
+        if (field[this.currentX][this.currentY - 1].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
-        if (field[this.currentX + 1][this.currentY].getCurrentCrop() != null){
+        if (field[this.currentX + 1][this.currentY].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
-        if (field[this.currentX - 1][this.currentY].getCurrentCrop() != null){
+        if (field[this.currentX - 1][this.currentY].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
         // check if diagonal tiles are empty
-        if (field[this.currentX + 1][this.currentY + 1].getCurrentCrop() != null){
+        if (field[this.currentX + 1][this.currentY + 1].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
-        if (field[this.currentX - 1][this.currentY - 1].getCurrentCrop() != null){
+        if (field[this.currentX - 1][this.currentY - 1].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
-        if (field[this.currentX + 1][this.currentY - 1].getCurrentCrop() != null){
+        if (field[this.currentX + 1][this.currentY - 1].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
-        if (field[this.currentX - 1][this.currentY + 1].getCurrentCrop() != null){
+        if (field[this.currentX - 1][this.currentY + 1].getCurrentCrop() != null) {
             return new Report(false, "Tile is occupied");
         }
 
@@ -164,26 +173,28 @@ public class Farmer {
 
     /**
      * Plants a seed on the specified tile
+     * 
      * @param seed the seed to be planted
      * @param tile the tile on which the seed will be planted
-     * @return a rich message containing: true if the planting was successful, false otherwise
+     * @return a rich message containing: true if the planting was successful, false
+     *         otherwise
      */
-    public Report plantSeed(Seed seed, Tile tile){
+    public Report plantSeed(Seed seed, Tile tile) {
 
         // check if seed exists in inventory
-        if(!seedInventory.contains(seed))
+        if (!seedInventory.contains(seed))
             return new Report(false, "Seed not found in inventory");
 
         if (!tile.isPlowed())
             return new Report(false, "Tile is not plowed");
 
-        if(tile.isOccupied())
+        if (tile.isOccupied())
             return new Report(false, "Tile is occupied");
 
-        if(tile.hasRocks())
+        if (tile.hasRocks())
             return new Report(false, "Tile has rocks");
 
-        if(tile.getCurrentCrop() != null)
+        if (tile.getCurrentCrop() != null)
             return new Report(false, "Tile already has a crop");
 
         tile.setCurrentCrop(new Crop(seed));
@@ -196,10 +207,12 @@ public class Farmer {
     /**
      * Harvests the crop on the specified tile and instantly sells it.
      * The specified tile is also emptied.
+     * 
      * @param tile the tile on which the crop will be harvested
-     * @return a rich message containing: true if the harvesting was successful, false otherwise
+     * @return a rich message containing: true if the harvesting was successful,
+     *         false otherwise
      */
-    public Report harvestCrop(Tile tile){
+    public Report harvestCrop(Tile tile) {
 
         if (tile.getCurrentCrop() == null)
             return new Report(false, "Tile does not have a crop");
@@ -216,15 +229,15 @@ public class Farmer {
         double waterBonus = 0;
         double fertilizerBonus = 0;
         // check if waterMax has beeen met
-        if(tile.getCurrentCrop().getWaterLevel() >= tile.getCurrentCrop().getWaterMax())
+        if (tile.getCurrentCrop().getWaterLevel() >= tile.getCurrentCrop().getWaterMax())
             waterBonus = harvestTotal * 0.2 * (tile.getCurrentCrop().getWaterLevel() - 1);
 
-        if(tile.getCurrentCrop().getFertilizerLevel() >= tile.getCurrentCrop().getFertilizerMax())
+        if (tile.getCurrentCrop().getFertilizerLevel() >= tile.getCurrentCrop().getFertilizerMax())
             fertilizerBonus = harvestTotal * 0.5 * tile.getCurrentCrop().getFertilizerLevel();
 
         harvestTotal += waterBonus + fertilizerBonus;
 
-        if(tile.getCurrentCrop().getCropType() == "Flower")
+        if (tile.getCurrentCrop().getCropType() == "Flower")
             harvestTotal *= 1.1;
 
         // add coins to farmer
@@ -238,39 +251,41 @@ public class Farmer {
 
     /**
      * Performs the pickaxe's action on the specified tile
+     * 
      * @param tile the tile on which the pickaxe will be used
-     * @return a rich message containing: true if the pickaxe was successful, false otherwise
+     * @return a rich message containing: true if the pickaxe was successful, false
+     *         otherwise
      */
-    public Report usePickaxe(Tile tile){
+    public Report usePickaxe(Tile tile) {
         // check if farmer has enough money
-        if (this.objectCoins >= this.pickaxe.getCost()){
+        if (this.objectCoins >= this.pickaxe.getCost()) {
             // subtract cost from farmer's money
             this.objectCoins -= this.pickaxe.getCost();
 
-            if(pickaxe.mineRocks(tile).isSuccess()){
+            if (pickaxe.mineRocks(tile).isSuccess()) {
                 // add exp to farmer
                 addExp(this.pickaxe.getExpGain());
                 return new Report(true, "Rocks mined successfully");
-            }
-            else{
+            } else {
                 return new Report(false, "Rocks not found");
             }
-        }
-        else{
+        } else {
             return new Report(false, "Not enough money");
         }
     }
 
     /**
      * Waters a crop on the specified tile
+     * 
      * @param tile the tile on which the crop will be watered
-     * @return a rich message containing: true if the watering was successful, false otherwise
+     * @return a rich message containing: true if the watering was successful, false
+     *         otherwise
      */
-    public Report useWateringCan(Tile tile){
+    public Report useWateringCan(Tile tile) {
 
         Report retval = this.wateringCan.waterTile(this.type, tile);
 
-        if (retval.isSuccess()){
+        if (retval.isSuccess()) {
             addExp(this.wateringCan.getExpGain());
         }
 
@@ -279,25 +294,26 @@ public class Farmer {
 
     /**
      * Fertilizes a crop on the specified tilek
+     * 
      * @param tile the tile on which the crop will be fertilized
-     * @return a rich message containing: true if the fertilizing was successful, false otherwise
+     * @return a rich message containing: true if the fertilizing was successful,
+     *         false otherwise
      */
-    public Report useFertilizer(Tile tile){
+    public Report useFertilizer(Tile tile) {
 
         // contingency case
         Report retval = new Report(false, "Failed to fertilize tile");
         // check if farmer has enough money
-        if (this.objectCoins >= this.fertilizer.getCost()){
+        if (this.objectCoins >= this.fertilizer.getCost()) {
             // subtract cost from farmer's money
             this.objectCoins -= this.fertilizer.getCost();
 
             retval = this.fertilizer.fertilizeTile(this.type, tile);
 
-            if(retval.isSuccess()){
+            if (retval.isSuccess()) {
                 addExp(this.fertilizer.getExpGain());
             }
-        }
-        else
+        } else
             retval = new Report(false, "Not enough money");
 
         return retval;
@@ -305,22 +321,23 @@ public class Farmer {
 
     /**
      * Performs the shovel's action on the specified tile
+     * 
      * @param tile the tile on which the shovel will be used
-     * @return a rich message containing: true if the shovel was successful, false otherwise
+     * @return a rich message containing: true if the shovel was successful, false
+     *         otherwise
      */
-    public Report useShovel(Tile tile){
+    public Report useShovel(Tile tile) {
         Report retval = new Report(false, "Failed to dig tile");
 
         // check if farmer has enough money
-        if (this.objectCoins >= this.shovel.getCost()){
+        if (this.objectCoins >= this.shovel.getCost()) {
             // subtract cost from farmer's money
             this.objectCoins -= this.shovel.getCost();
 
             retval = this.shovel.digWitheredCrop(tile);
-            if(retval.isSuccess())
+            if (retval.isSuccess())
                 addExp(this.shovel.getExpGain());
-        }
-        else{
+        } else {
             retval = new Report(false, "Not enough money");
         }
 
@@ -329,22 +346,24 @@ public class Farmer {
 
     /**
      * Performs the plow's action on the specified tile
+     * 
      * @param tile the tile on which the plow will be used
-     * @return a rich message containing: true if the plow was successful, false otherwise
+     * @return a rich message containing: true if the plow was successful, false
+     *         otherwise
      */
-    public Report usePlow(Tile tile){
+    public Report usePlow(Tile tile) {
 
         Report retval = this.plow.plowTile(tile);
-        if(retval.isSuccess())
+        if (retval.isSuccess())
             addExp(this.plow.getExpGain());
-        
+
         return retval;
     }
 
     /**
      * Prints all seeds available to the farmer
      */
-    public void showSeedInventory(){
+    public void showSeedInventory() {
 
         System.out.println("Seed Inventory:");
         for (int i = 0; i < this.seedInventory.size(); i++) {
@@ -367,7 +386,7 @@ public class Farmer {
         return name;
     }
 
-    public String getType(){
+    public String getType() {
 
         return type.getType();
     }
@@ -380,7 +399,7 @@ public class Farmer {
     /**
      * Prints the farmer's stats
      */
-    public void printFarmerStatus(){
+    public void printFarmerStatus() {
         System.out.println(this.type.getType() + " Farmer " + this.name);
         System.out.println("Current exp: " + this.currentExp);
         // print current position
@@ -393,4 +412,3 @@ public class Farmer {
     }
 
 }
-

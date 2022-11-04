@@ -10,7 +10,7 @@ public class Plow extends Tool {
         this.expGain = 0.5;
     }
 
-    public Report plowTile(Tile tile){
+    public Report plowTile(Tile tile) {
         // check if tile has crop
         if (tile.getCurrentCrop() != null)
             return new Report(false, "There is a crop on the tile.");
