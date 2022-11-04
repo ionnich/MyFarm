@@ -8,12 +8,26 @@ public class App {
     private static String dayEndFlag = "DAY_END";
     private static Scanner sc = new Scanner(System.in);
 
-    public static void begin() {
+    
+    /** 
+     * a method that signals the beginning of the game
+     * @return String
+     */
+    public static String begin() {
         System.out.println("Welcome MyFarm!");
         isRunning = true;
+
+        // prompt user for farm name
+        System.out.println("Please enter your farm name: ");
+        String farmName = sc.nextLine();
+        return farmName;
     }
-
-
+    
+    /** 
+     * canContinue checks if the game must continue running
+     * @param farm the farm where the game is taking place
+     * @return Report contains the status of the game and the boolean value linked to isRunning
+     */
     public static Report canContinue(FarmLand farm) {
 
         Report retval = new Report(true, "Onto the next day.");
@@ -77,6 +91,11 @@ public class App {
         return retval;
     }
 
+    
+    /** 
+     * GameLoop is the main method that runs the game
+     * @param farm the farm where the game is taking place
+     */
     public static void GameLoop(FarmLand farm){
 
         while(isRunning){
@@ -130,18 +149,35 @@ public class App {
         farm.showFarm();
     }
 
-
+    /** 
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
-        begin();
-        FarmLand farm = new FarmLand(
-            1, 1,
-            new Farmer("Beta Tester"),
-            "Prototype",
-            null
-        );
 
-        GameLoop(farm);
+        boolean playAgain = true;
+
+        String name = begin();
+        while(playAgain){
+            isRunning = true;
+
+            FarmLand farm = new FarmLand(
+                1, 1,
+                new Farmer("Beta Tester"),
+                name,
+                null
+            );
+
+            GameLoop(farm);
+
+            // ask the user if they want to play again
+            System.out.println("Do you want to play again? (y/n)");
+            String input = sc.nextLine();
+            if(input.equals("n") || input.equals("N"))
+                playAgain = false;
+        }
+
+        sc.close();
     }
-
-
 }
+

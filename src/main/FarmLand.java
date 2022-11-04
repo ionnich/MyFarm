@@ -4,6 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+* The FarmLand is the playing area of the game. It contains a 2D array of tiles
+* @version 1.0
+*/
 public class FarmLand {
     
     Tile tiles[][];
@@ -15,6 +19,15 @@ public class FarmLand {
     Farmer farmer;
     String farmName;
 
+    /**
+     * Creates a FarmLand object
+     * @param height the height of the farm's tiles
+     * @param length the length of the farm's tiles
+     * @param farmer the farmer who owns and operates the farm
+     * @param farmName the name of the farm
+     * @param rockstatus the scattering configuration of the rocks
+     * @throws Exception if one of the seeds inside the seedList is not found
+     */
     public FarmLand(int height, int length, Farmer farmer, String farmName, File rockstatus) throws Exception{
 
         this.height = height;
@@ -25,6 +38,13 @@ public class FarmLand {
         this.tiles = new Tile[length][height];
         this.seedList = new ArrayList<Seed>();
         this.seedList.add(new Seed("Turnip"));
+        this.seedList.add(new Seed("Carrot"));
+        this.seedList.add(new Seed("Potato"));
+        this.seedList.add(new Seed("Rose"));
+        this.seedList.add(new Seed("Tulips"));
+        this.seedList.add(new Seed("Sunflower"));
+        this.seedList.add(new Seed("Mango"));
+        this.seedList.add(new Seed("Apple"));
 
         // initialize tiles
         for(int i = 0; i < height; i++){
@@ -48,6 +68,10 @@ public class FarmLand {
         }
     }
 
+    /**
+     * Prints the list of actions available to the player
+     * @return A string containing all valid characters for the player to input
+     */
     public String getActions(){
 
         String inputs = "";
@@ -101,6 +125,10 @@ public class FarmLand {
         return inputs;
     }
 
+    /**
+     * Ends the day and updates the status of all crops on the farm
+     * @return the context by which the day was ended
+     */
     public Report endDay(){
 
         // grow all crops
@@ -114,6 +142,11 @@ public class FarmLand {
         return new Report(true, "DAY_END");
     }
 
+    /**
+     * Performs actions based on the input of the player
+     * @param inputs the inputs available to the player
+     * @return the result of the action taken
+     */
     public Report performAction(String inputs){
 
         Report retval = new Report(false, "Invalid input.");
@@ -143,7 +176,7 @@ public class FarmLand {
                     System.out.println("select seed to buy: ");
                     int seed = sc.nextInt();
                     if(!(seed < 0 || seed >= this.getSeedList().size())){
-                        retval = this.farmer.buySeed(this.getSeed(seed));
+                        retval = this.farmer.buySeed(this.getSeed(seed), this.farmer.type);
                     }
                     break;
                 case "z":
@@ -156,7 +189,17 @@ public class FarmLand {
                     System.out.println("select seed to plant: ");
                     int seedIndex = sc.nextInt();
                     if(!(seedIndex < 0 || seedIndex >= this.farmer.getSeedInventory().size())){
-                        retval = this.farmer.plantSeed(this.farmer.getSeedInventory().get(seedIndex), this.getFarmerTile());
+                        Seed testSeed = this.farmer.getSeedInventory().get(seedIndex);
+                        // check if seed is a tree seed
+                        if(new Crop(testSeed).getCropType() == "Tree"){
+                            retval = this.farmer.plantTree(testSeed, tiles);
+                        }
+                        else{
+                            retval = this.farmer.plantSeed(this.farmer.getSeedInventory().get(seedIndex), this.getFarmerTile());
+                        }
+                    }
+                    else{
+                        retval = new Report(false, "Invalid seed index.");
                     }
                     break;
                 case "i":
@@ -191,6 +234,9 @@ public class FarmLand {
         return retval;
     }
 
+    /**
+     * Shows all seeds purchasable by the farmer
+     */
     public void showAllSeeds(){
 
         // list all available seeds in list form
@@ -230,7 +276,9 @@ public class FarmLand {
         }
     }
 
-    // display farm as a grid of tiles
+    /**
+     * Draws the farm as a grid of tiles
+     */
     public void showFarm(){
         // print tile numbers
         for(int i = 0; i < this.length; i++){
@@ -251,12 +299,21 @@ public class FarmLand {
         }
     }
 
+    /**
+     * @return the current tile the farmer is standing on
+     */
     public Tile getFarmerTile(){
 
         // get the tile the farmer is currently on
         return tiles[this.farmer.getCurrentY()][this.farmer.getCurrentX()];
     }
 
+    /**
+     * Changes the farmer's position to the specified tile
+     * @param x the x coordinate of the tile 
+     * @param y the y coordinate of the tile
+     * @return the context of the move
+     */
     public Report moveFarmer(int x, int y){
 
         // move farmer to a new tile

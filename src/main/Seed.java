@@ -1,5 +1,9 @@
 package main;
 
+/**
+* A seed creates a crop and holds/dictates its corresponding attributes
+* @version 1.0
+*/
 public class Seed {
 
 
@@ -31,6 +35,11 @@ public class Seed {
     private double expGain;
 
 
+    /**
+     * Creates a new seed object depending on the supplied seedName
+     * @param name the name of the desired seed
+     * @throws Exception if the seedName is not found in the seedList
+     */
     public Seed(String name) throws Exception{
 
         boolean exists = false;
@@ -80,6 +89,7 @@ public class Seed {
                 makeApple();
                 break;
             default:
+                makeDefault();
                 throw new Exception("Seed does not exist");
         }
     }
@@ -128,6 +138,9 @@ public class Seed {
         return expGain;
     }
 
+    /**
+     * changes the attributes of the seed to default
+     */
     private void makeDefault(){
 
         this.name = null;
@@ -143,6 +156,9 @@ public class Seed {
         this.expGain = 0;
     }
 
+    /**
+     * changes the attributes of the seed to a turnip
+     */
     private void makeTurnip(){
 
         this.daysToHarvest = 2;
@@ -157,6 +173,10 @@ public class Seed {
         this.expGain = 5;
     }
 
+
+    /**
+     * changes the attributes of the seed to a carrot
+     */
     private void makeCarrot(){
 
         this.daysToHarvest = 3;
@@ -171,6 +191,10 @@ public class Seed {
         this.expGain = 7.5;
     }
 
+
+    /**
+     * changes the attributes of the seed to a potato
+     */
     private void makePotato(){
             
             this.daysToHarvest = 5;
@@ -185,6 +209,9 @@ public class Seed {
             this.expGain = 12.5;
     }
 
+    /**
+     * changes the attributes of the seed to a rose
+     */
     private void makeRose(){
 
         this.daysToHarvest = 1;
@@ -199,6 +226,9 @@ public class Seed {
         this.expGain = 2.5;
     }
 
+    /**
+     * changes the attributes of the seed to a tulip
+     */
     private void makeTulips(){
 
         this.daysToHarvest = 2;
@@ -213,6 +243,9 @@ public class Seed {
         this.expGain = 5;
     }
 
+    /**
+     * changes the attributes of the seed to a sunflower
+     */
     private void makeSunflower(){
 
         this.daysToHarvest = 3;
@@ -227,6 +260,9 @@ public class Seed {
         this.expGain = 7.5;
     }
 
+    /**
+     * changes the attributes of the seed to a mango
+     */
     private void makeMango(){
 
         this.daysToHarvest = 10;
@@ -241,6 +277,9 @@ public class Seed {
         this.expGain = 25;
     }
 
+    /**
+     * changes the attributes of the seed to an apple
+     */
     private void makeApple(){
 
         this.daysToHarvest = 10;
@@ -254,13 +293,5 @@ public class Seed {
         this.baseSellPrice = 8;
         this.expGain = 25;
     }
-
-
-
-    // store seed methods in a list
-
-    
-
-
 
 }

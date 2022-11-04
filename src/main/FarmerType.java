@@ -1,5 +1,9 @@
 package main;
 
+/**
+* FarmerType represents the different types of farmers in the game.
+* @version 1.0
+*/
 public class FarmerType {
 
     // name for the type of farmer
@@ -12,7 +16,9 @@ public class FarmerType {
     private int fertilizerMaxIncrease;
     private double registrationFee;
 
-    // default FarmerType
+    /**
+     * Creates a new unregistered farmer type object
+     */
     public FarmerType(){
 
         this.type = "Unregistered";
@@ -23,6 +29,10 @@ public class FarmerType {
         this.registrationFee = 0;
     }
 
+    /**
+     * Creates a new farmer type object based on the supplied type
+     * @param type the name of the farmer type
+     */
     public FarmerType(String type){
 
         if(type == "Registered"){

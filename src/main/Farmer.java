@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import tools.*;
 
+/**
+* The farmer is the main actor in FarmerType
+* @version 1.0
+*/
 public class Farmer {
 
     FarmerType type;
@@ -25,6 +29,9 @@ public class Farmer {
     Shovel shovel;
     Pickaxe pickaxe;
 
+    /**
+     * Creates a new farmer object
+     */
     public Farmer(){
 
         this.name = "Adam Smith";
@@ -39,6 +46,10 @@ public class Farmer {
         this.pickaxe = new Pickaxe();
     }
 
+    /**
+     * Creates a new farmer object with the specified name
+     * @param name the name of the farmer
+     */
     public Farmer(String name){
 
         this.name = name;
@@ -57,7 +68,10 @@ public class Farmer {
         return this.currentExp;
     }
 
-    public void addExp(double expAmount) {
+    /**
+     * @param expAmount the amount of exp to be added to the farmer's current exp
+     */
+    private void addExp(double expAmount) {
         this.currentExp += expAmount;
     }
 
@@ -69,25 +83,39 @@ public class Farmer {
         return this.currentY;
     }
 
-    // must be used to move farmer
-    // used by FarmLand to move farmer
+    /**
+     * Changes the farmer's current coordinates
+     * @param x the new x coordinate
+     * @param y the new y coordinate
+     */
     public void gotoTile(int x, int y){
         this.currentX = x;
         this.currentY = y;
     }
 
-    public Report buySeed(Seed seed){
+    /**
+     * Purchases a seed from the farm and adds it to the farmer's inventory
+     * @param seed the seed to be purchased
+     * @param type the farmer's type (used to determine the price of the seed)
+     * @return a rich message containing: true if the purchase was successful, false otherwise
+     */
+    public Report buySeed(Seed seed, FarmerType type){
 
         // check if farmer has enough money
-        if(this.objectCoins < seed.getCost())
+        if(this.objectCoins < seed.getCost() - type.getSeedCostReduction())
             return new Report(false, "You do not have enough money to buy this seed.");
 
         this.seedInventory.add(seed);
-        this.objectCoins -= seed.getCost();
+        this.objectCoins -= (seed.getCost() - type.getSeedCostReduction());
         return new Report(true, "You have bought " + seed.getName() + " for " + seed.getCost() + " coins.");
     }
 
-    // planting logic for fruit trees
+    /**
+     * Plants a tree on the specified tile
+     * @param seed the seed to be planted
+     * @param field the farm's 2d array of tiles (used to determine whether the farm can accommodate the tree)
+     * @return a rich message containing: true if the planting was successful, false otherwise
+     */
     public Report plantTree(Seed seed, Tile[][] field){
 
         // chcek if adjacent tiles are empty
@@ -134,9 +162,13 @@ public class Farmer {
         return new Report(true, "Tree planted successfully");
     }
 
+    /**
+     * Plants a seed on the specified tile
+     * @param seed the seed to be planted
+     * @param tile the tile on which the seed will be planted
+     * @return a rich message containing: true if the planting was successful, false otherwise
+     */
     public Report plantSeed(Seed seed, Tile tile){
-
-        // TODO: REFACTOR THIS CODE
 
         // check if seed exists in inventory
         if(!seedInventory.contains(seed))
@@ -161,6 +193,12 @@ public class Farmer {
         return new Report(true, "Seed planted successfully");
     }
 
+    /**
+     * Harvests the crop on the specified tile and instantly sells it.
+     * The specified tile is also emptied.
+     * @param tile the tile on which the crop will be harvested
+     * @return a rich message containing: true if the harvesting was successful, false otherwise
+     */
     public Report harvestCrop(Tile tile){
 
         if (tile.getCurrentCrop() == null)
@@ -172,7 +210,6 @@ public class Farmer {
         if (tile.getCurrentCrop().isWithered())
             return new Report(false, "Crop is withered");
 
-        // TODO: ADD HARVEST LOGIC
         int yield = tile.getCurrentCrop().getYield();
         double harvestTotal = yield * (tile.getCurrentCrop().getMarketPrice() + type.getBonusEarnings());
 
@@ -199,7 +236,11 @@ public class Farmer {
         return new Report(true, "Crop harvested successfully\nProduced: " + yield + " Sold for: " + harvestTotal);
     }
 
-    // uses pickaxe on current tile
+    /**
+     * Performs the pickaxe's action on the specified tile
+     * @param tile the tile on which the pickaxe will be used
+     * @return a rich message containing: true if the pickaxe was successful, false otherwise
+     */
     public Report usePickaxe(Tile tile){
         // check if farmer has enough money
         if (this.objectCoins >= this.pickaxe.getCost()){
@@ -208,7 +249,7 @@ public class Farmer {
 
             if(pickaxe.mineRocks(tile).isSuccess()){
                 // add exp to farmer
-                this.currentExp += this.pickaxe.getExpGain();
+                addExp(this.pickaxe.getExpGain());
                 return new Report(true, "Rocks mined successfully");
             }
             else{
@@ -220,17 +261,27 @@ public class Farmer {
         }
     }
 
+    /**
+     * Waters a crop on the specified tile
+     * @param tile the tile on which the crop will be watered
+     * @return a rich message containing: true if the watering was successful, false otherwise
+     */
     public Report useWateringCan(Tile tile){
 
         Report retval = this.wateringCan.waterTile(this.type, tile);
 
         if (retval.isSuccess()){
-            this.currentExp += this.wateringCan.getExpGain();
+            addExp(this.wateringCan.getExpGain());
         }
 
         return retval;
     }
 
+    /**
+     * Fertilizes a crop on the specified tilek
+     * @param tile the tile on which the crop will be fertilized
+     * @return a rich message containing: true if the fertilizing was successful, false otherwise
+     */
     public Report useFertilizer(Tile tile){
 
         // contingency case
@@ -243,7 +294,7 @@ public class Farmer {
             retval = this.fertilizer.fertilizeTile(this.type, tile);
 
             if(retval.isSuccess()){
-                this.currentExp += this.fertilizer.getExpGain();
+                addExp(this.fertilizer.getExpGain());
             }
         }
         else
@@ -252,6 +303,11 @@ public class Farmer {
         return retval;
     }
 
+    /**
+     * Performs the shovel's action on the specified tile
+     * @param tile the tile on which the shovel will be used
+     * @return a rich message containing: true if the shovel was successful, false otherwise
+     */
     public Report useShovel(Tile tile){
         Report retval = new Report(false, "Failed to dig tile");
 
@@ -262,7 +318,7 @@ public class Farmer {
 
             retval = this.shovel.digWitheredCrop(tile);
             if(retval.isSuccess())
-                this.currentExp += this.shovel.getExpGain();
+                addExp(this.shovel.getExpGain());
         }
         else{
             retval = new Report(false, "Not enough money");
@@ -271,15 +327,23 @@ public class Farmer {
         return retval;
     }
 
+    /**
+     * Performs the plow's action on the specified tile
+     * @param tile the tile on which the plow will be used
+     * @return a rich message containing: true if the plow was successful, false otherwise
+     */
     public Report usePlow(Tile tile){
 
         Report retval = this.plow.plowTile(tile);
         if(retval.isSuccess())
-            this.currentExp += this.plow.getExpGain();
+            addExp(this.plow.getExpGain());
         
         return retval;
     }
 
+    /**
+     * Prints all seeds available to the farmer
+     */
     public void showSeedInventory(){
 
         System.out.println("Seed Inventory:");
@@ -313,14 +377,17 @@ public class Farmer {
         return seedInventory;
     }
 
+    /**
+     * Prints the farmer's stats
+     */
     public void printFarmerStatus(){
         System.out.println(this.type.getType() + " Farmer " + this.name);
+        System.out.println("Current exp: " + this.currentExp);
         // print current position
-        System.out.print(" in x: " + this.currentX + " y: " + this.currentY);
+        System.out.print("in x: " + this.currentX + " y: " + this.currentY);
         // print current balance
         System.out.println(" $ " + this.objectCoins);
         // print current exp
-        System.out.println("Current exp: " + this.currentExp);
 
         System.out.println("---------------------------");
     }
