@@ -2,7 +2,17 @@ package main;
 
 import java.util.Scanner;
 
+/**
+ * The main class containing the GameLoop
+ * 
+ * @version 1.0
+ */
 public class App {
+
+    private App() {
+        // private constructor to prevent instantiation
+        throw new IllegalStateException("Utility class");
+    }
 
     private static boolean isRunning;
     private static String dayEndFlag = "DAY_END";
@@ -11,10 +21,11 @@ public class App {
     /**
      * a method that signals the beginning of the game
      * 
-     * @return String
+     * @return the name of the farm
      */
     public static String begin() {
-        System.out.println("Welcome MyFarm!");
+        System.out.println("Welcome to MyFarm!");
+        System.out.println();
         isRunning = true;
 
         // prompt user for farm name
@@ -32,7 +43,7 @@ public class App {
      */
     public static Report canContinue(FarmLand farm) {
 
-        Report retval = new Report(true, "Onto the next day.");
+        Report retval = new Report(true, "Goodnight " + farm.farmer.getName() + ". Onto the next day.");
 
         boolean staleFarm = true;
         boolean brokeFarm = false;
@@ -100,6 +111,8 @@ public class App {
      */
     public static void GameLoop(FarmLand farm) {
 
+        int daycounter = 1;
+
         while (isRunning) {
             boolean dayEnd = false;
 
@@ -111,6 +124,7 @@ public class App {
                 // print farmer status
                 farm.farmer.printFarmerStatus();
                 // print farm status
+                System.out.println("Day " + daycounter);
                 farm.showFarm();
 
                 // get valid inputs
@@ -129,10 +143,25 @@ public class App {
                     // clear the screen
                     System.out.print("\033[H\033[2J");
                     dayEnd = true;
+                    daycounter++;
+
+                    farm.farmer.levelUp();
+                    if (farm.farmer.canUpgrade() != null) {
+                        // prompt user to upgrade
+                        System.out.println("Level and coin requirements met! Upgrade your license? (y/n)");
+                        String upgrade = sc.nextLine();
+                        if (upgrade.equals("Y") || upgrade.equals("y")) {
+                            FarmerType next = farm.farmer.canUpgrade();
+                            System.out.println(farm.farmer.payFee(next).getMessage());
+                            System.out.println(farm.upgradeFarmer());
+                        }
+                    }
+
                 }
             }
             // check if game can continue
             Report canContinue = canContinue(farm);
+            // system out the message
             System.out.println(canContinue.getMessage());
             // ask user to press enter to continue
             System.out.println("press enter to continue");
@@ -154,7 +183,7 @@ public class App {
     /**
      * @throws Exception
      */
-    public static void main() throws Exception {
+    public static void main(String[] args) throws Exception {
 
         boolean playAgain = true;
 
@@ -163,7 +192,7 @@ public class App {
             isRunning = true;
 
             FarmLand farm = new FarmLand(
-                    1, 1,
+                    3, 3,
                     new Farmer("Beta Tester"),
                     name,
                     null);

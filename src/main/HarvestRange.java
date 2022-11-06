@@ -10,6 +10,12 @@ public class HarvestRange {
     private int max;
     private int min;
 
+    /**
+     * Creates a new harvest range object
+     * 
+     * @param min the minimum harvest amount
+     * @param max the maximum harvest amount
+     */
     public HarvestRange(int min, int max) {
         this.max = max;
         this.min = min;

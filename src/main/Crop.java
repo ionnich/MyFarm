@@ -40,33 +40,33 @@ public class Crop {
         this.marketPrice = seed.getBaseSellPrice();
         this.expGain = seed.getExpGain();
         this.harvestRange = new HarvestRange(seed.getHarvestMin(), seed.getHarvestMax());
+
+        if (seed.getName() == "Turnip" ||
+                seed.getName() == "Carrot" ||
+                seed.getName() == "Potato") {
+            this.cropType = "Root Crop";
+        } else if (seed.getName() == "Rose" ||
+                seed.getName() == "Tulips" ||
+                seed.getName() == "Sunflower") {
+            this.cropType = "Flower";
+        } else if (seed.getName() == "Mango" || seed.getName() == "Apple") {
+            this.cropType = "Fruit Tree";
+        }
     }
 
-    /**
-     * @return the cropType
-     */
     public String getCropType() {
         return cropType;
     }
 
-    /**
-     * @return the crop's current water level
-     */
     public int getWaterLevel() {
         return waterLevel;
     }
 
-    /**
-     * @return the selling price of the crop
-     */
     public double getMarketPrice() {
 
         return this.marketPrice;
     }
 
-    /**
-     * @return the limit of the water level
-     */
     public double getWaterMax() {
 
         return this.source.getWaterMax();
@@ -196,7 +196,7 @@ public class Crop {
         String witherFertilizer = "";
 
         // check if water needs are met on harvestDay
-        if (this.waterLevel < this.source.getWaterNeeds()) {
+        if (this.waterLevel < this.source.getWaterNeeds() && this.harvestCountdown <= 0) {
             if (this.harvestCountdown <= 0) {
                 this.witherPlant();
 
@@ -213,7 +213,7 @@ public class Crop {
             }
         }
 
-        if (witherWater != "" && witherFertilizer != "")
+        if (!witherWater.equals("") && !witherFertilizer.equals(""))
             witherWater += " and ";
 
         witherReason = witherWater + witherFertilizer;
@@ -229,7 +229,6 @@ public class Crop {
         }
 
         return new Report(true, "Crop has grown");
-
     }
 
 }

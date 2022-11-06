@@ -77,7 +77,6 @@ public class Farmer {
         this.currentExp += expAmount;
     }
 
-    // get coordinates
     public int getCurrentX() {
         return this.currentX;
     }
@@ -128,33 +127,21 @@ public class Farmer {
     public Report plantTree(Seed seed, Tile[][] field) {
 
         // chcek if adjacent tiles are empty
-        if (field[this.currentX][this.currentY + 1].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
-        }
-        if (field[this.currentX][this.currentY - 1].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
-        }
-        if (field[this.currentX + 1][this.currentY].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
-        }
-        if (field[this.currentX - 1][this.currentY].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
+        if (field[this.currentX][this.currentY + 1].getCurrentCrop() != null ||
+                field[this.currentX][this.currentY - 1].getCurrentCrop() != null ||
+                field[this.currentX + 1][this.currentY].getCurrentCrop() != null ||
+                field[this.currentX - 1][this.currentY].getCurrentCrop() != null) {
+            return new Report(false, "Failed to plant tree seed, adjacent tiles are not empty.");
         }
         // check if diagonal tiles are empty
-        if (field[this.currentX + 1][this.currentY + 1].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
-        }
-        if (field[this.currentX - 1][this.currentY - 1].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
-        }
-        if (field[this.currentX + 1][this.currentY - 1].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
-        }
-        if (field[this.currentX - 1][this.currentY + 1].getCurrentCrop() != null) {
-            return new Report(false, "Tile is occupied");
+        if (field[this.currentX + 1][this.currentY + 1].getCurrentCrop() != null ||
+                field[this.currentX - 1][this.currentY - 1].getCurrentCrop() != null ||
+                field[this.currentX + 1][this.currentY - 1].getCurrentCrop() != null ||
+                field[this.currentX - 1][this.currentY + 1].getCurrentCrop() != null) {
+            return new Report(false, "Failed to plant tree seed, diagonal tiles are not empty.");
         }
 
-        plantSeed(seed, field[this.currentX][this.currentY + 1]);
+        plantSeed(seed, field[this.currentX][this.currentY]);
 
         // set adjacent tiles as occupied
         field[this.currentX][this.currentY + 1].setOccupied(true);
@@ -237,7 +224,7 @@ public class Farmer {
 
         harvestTotal += waterBonus + fertilizerBonus;
 
-        if (tile.getCurrentCrop().getCropType() == "Flower")
+        if (tile.getCurrentCrop().getCropType().equals("Flower"))
             harvestTotal *= 1.1;
 
         // add coins to farmer
@@ -301,8 +288,7 @@ public class Farmer {
      */
     public Report useFertilizer(Tile tile) {
 
-        // contingency case
-        Report retval = new Report(false, "Failed to fertilize tile");
+        Report retval;
         // check if farmer has enough money
         if (this.objectCoins >= this.fertilizer.getCost()) {
             // subtract cost from farmer's money
@@ -327,7 +313,7 @@ public class Farmer {
      *         otherwise
      */
     public Report useShovel(Tile tile) {
-        Report retval = new Report(false, "Failed to dig tile");
+        Report retval;
 
         // check if farmer has enough money
         if (this.objectCoins >= this.shovel.getCost()) {
@@ -386,9 +372,18 @@ public class Farmer {
         return name;
     }
 
-    public String getType() {
+    public String getTypeString() {
 
         return type.getType();
+    }
+
+    public void setType(FarmerType type) {
+
+        this.type = type;
+    }
+
+    public FarmerType getType() {
+        return type;
     }
 
     public ArrayList<Seed> getSeedInventory() {
@@ -401,14 +396,62 @@ public class Farmer {
      */
     public void printFarmerStatus() {
         System.out.println(this.type.getType() + " Farmer " + this.name);
-        System.out.println("Current exp: " + this.currentExp);
+        System.out.println("Position x:" + this.currentX + " y:" + this.currentY);
+        System.out.println("XP: " + this.currentExp);
+        System.out.println("Coins: $" + this.objectCoins);
         // print current position
-        System.out.print("in x: " + this.currentX + " y: " + this.currentY);
         // print current balance
-        System.out.println(" $ " + this.objectCoins);
         // print current exp
 
-        System.out.println("---------------------------");
+        System.out.println("\n");
+    }
+
+    /**
+     * Determines the next type available to the farmer
+     * 
+     * @return the next type available to the farmer
+     */
+    public FarmerType canUpgrade() {
+
+        FarmerType nextUpgrade = null;
+
+        if (this.type.getType() == "Unregistered")
+            nextUpgrade = new FarmerType("Registered");
+        else if (this.type.getType() == "Registered")
+            nextUpgrade = new FarmerType("Distinguished");
+        else if (this.type.getType() == "Distinguished")
+            nextUpgrade = new FarmerType("Legendary");
+        else
+            return nextUpgrade;
+
+        // check if farmer meets level requirements
+        if (this.getCurrentExp() >= nextUpgrade.getLevelRequirement()) {
+            // check if farmer has enough money
+            if (this.getObjectCoins() >= nextUpgrade.getRegistrationFee()) {
+                return nextUpgrade;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param upgrade the type containing the requisite fees to be paid for the
+     *                upgrade
+     * @return a rich message containing true if the payment was successful, false
+     *         otherwise
+     */
+    public Report payFee(FarmerType upgrade) {
+
+        if (this.getObjectCoins() >= upgrade.getRegistrationFee()) {
+            this.objectCoins -= upgrade.getRegistrationFee();
+            return new Report(true, "Fee paid successfully");
+        } else
+            return new Report(false, "Not enough money");
+    }
+
+    public void levelUp() {
+        this.level = (int) this.currentExp / 100;
     }
 
 }

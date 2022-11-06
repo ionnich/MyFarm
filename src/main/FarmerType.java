@@ -74,7 +74,6 @@ public class FarmerType {
             System.out.println(type + " is not a valid FarmerType");
     }
 
-    // setters and getters for FarmerType
     public String getType() {
         return type;
     }

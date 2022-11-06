@@ -51,7 +51,7 @@ public class Seed {
                 exists = true;
                 this.name = name;
                 // end loop
-                i = seedTable.length;
+                break;
             }
         }
 

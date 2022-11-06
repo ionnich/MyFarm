@@ -146,6 +146,11 @@ public class Tile {
         if (this.currentCrop != null) {
 
             status[1] = "🌱";
+            if (this.currentCrop.getCropType() == "Fruit Tree")
+                status[1] = "🌳";
+            else if (this.currentCrop.getCropType() == "Flower")
+                status[1] = "🌸";
+
             if (this.currentCrop.getWaterLevel() > 0) {
                 status[0] = "💧";
             }
