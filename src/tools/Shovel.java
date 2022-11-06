@@ -32,6 +32,7 @@ public class Shovel extends Tool {
             return new Report(false, "The crop is not withered.");
 
         tile.setCurrentCrop(null);
+        tile.setPlowed(false);
         return new Report(true, "The withered crop has been removed from the tile.");
     }
 }
